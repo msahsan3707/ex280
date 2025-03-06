@@ -173,7 +173,7 @@ drwx------ 2 mahsan mahsan   24 Mar  6 10:29 ssh-XXXX5zXZOY
 [mahsan@r9 ~]$
 
 
-[mahsan@r9 ~]$ htpasswd -b /tmp/htpasswd mahsan tripod001
+<b> mahsan@r9 ~]$ htpasswd -b /tmp/htpasswd mahsan tripod001 </b>
 Updating password for user mahsan
 [mahsan@r9 ~]$ oc set data secret/localusers --from-file htpasswd=/tmp/htpasswd -n openshift-config
 secret/localusers data updated
