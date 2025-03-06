@@ -220,7 +220,37 @@ mahsan      e1c68c21-840c-45c4-8668-ea0d1405368e               myusers:mahsan
 Login failed (401 Unauthorized)
 Verify you have provided the correct credentials.
 [mahsan@r9 ~]$
-
+<b> Delete User and Identity </b>
+[mahsan@r9 ex280]$ oc get identities.user.openshift.io
+NAME                  IDP NAME    IDP USER NAME   USER NAME   USER UID
+developer:developer   developer   developer       developer   6e16cbbe-41aa-49cd-8158-5aab2967cadf
+developer:kubeadmin   developer   kubeadmin       kubeadmin   42c8dcb9-09ea-4b49-898c-4d90aad72acd
+myusers:admin         myusers     admin           admin       6ca28dbe-b8fe-4010-820f-2159648d3de8
+myusers:mahsan        myusers     mahsan          mahsan      e1c68c21-840c-45c4-8668-ea0d1405368e
+[mahsan@r9 ex280]$ oc get users
+NAME        UID                                    FULL NAME   IDENTITIES
+admin       6ca28dbe-b8fe-4010-820f-2159648d3de8               myusers:admin
+developer   6e16cbbe-41aa-49cd-8158-5aab2967cadf               developer:developer
+kubeadmin   42c8dcb9-09ea-4b49-898c-4d90aad72acd               developer:kubeadmin
+mahsan      e1c68c21-840c-45c4-8668-ea0d1405368e               myusers:mahsan
+[mahsan@r9 ex280]$ oc delete user mahsan
+user.user.openshift.io "mahsan" deleted
+[mahsan@r9 ex280]$ oc delete identities.user.openshift.io myusers:mahsan
+identity.user.openshift.io "myusers:mahsan" deleted
+[mahsan@r9 ex280]$ oc get users
+NAME        UID                                    FULL NAME   IDENTITIES
+admin       6ca28dbe-b8fe-4010-820f-2159648d3de8               myusers:admin
+developer   6e16cbbe-41aa-49cd-8158-5aab2967cadf               developer:developer
+kubeadmin   42c8dcb9-09ea-4b49-898c-4d90aad72acd               developer:kubeadmin
+[mahsan@r9 ex280]$ oc get identities.user.openshift.io
+NAME                  IDP NAME    IDP USER NAME   USER NAME   USER UID
+developer:developer   developer   developer       developer   6e16cbbe-41aa-49cd-8158-5aab2967cadf
+developer:kubeadmin   developer   kubeadmin       kubeadmin   42c8dcb9-09ea-4b49-898c-4d90aad72acd
+myusers:admin         myusers     admin           admin       6ca28dbe-b8fe-4010-820f-2159648d3de8
+[mahsan@r9 ex280]$ oc delete secrets localusers -n openshift-config
+secret "localusers" deleted
+[mahsan@r9 ex280]$
+ 
 
 </pre>
 
