@@ -1,5 +1,5 @@
 <pre>
-<h1> Authertication </h1>
+<h1> Auth </h1>
 
 [mahsan@r9 ~]$ htpasswd -c -b -B /tmp/htpasswd admin redhat
 Adding password for user admin
