@@ -3,13 +3,13 @@
 
 [mahsan@r9 ~]$ htpasswd -c -b -B /tmp/htpasswd admin redhat
 Adding password for user admin
-[mahsan@r9 ~]$ htpasswd -c -b -B /tmp/htpasswd indionce redhat
+[mahsan@r9 ~]$ htpasswd  -b -B /tmp/htpasswd indionce redhat
 Adding password for user indionce
-[mahsan@r9 ~]$ htpasswd -c -b -B /tmp/htpasswd qwerty redhat
+[mahsan@r9 ~]$ htpasswd  -b -B /tmp/htpasswd qwerty redhat
 Adding password for user qwerty
-[mahsan@r9 ~]$ htpasswd -c -b -B /tmp/htpasswd john  redhat
+[mahsan@r9 ~]$ htpasswd  -b -B /tmp/htpasswd john  redhat
 Adding password for user john
-[mahsan@r9 ~]$ htpasswd -c -b -B /tmp/htpasswd admin redhat
+[mahsan@r9 ~]$ htpasswd  -b -B /tmp/htpasswd admin redhat
 Adding password for user admin
 [mahsan@r9 ~]$ htpasswd  -b -B /tmp/htpasswd indionce redhat
 Adding password for user indionce
