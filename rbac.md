@@ -199,6 +199,34 @@ warning: Cannot find git. Ensure that it is installed and in your path. Git is r
     Run 'oc status' to view your app.
 [mahsan@r9 tmp]$
 
+[mahsan@r9 ex280]$ oc get pods
+NAME                      READY   STATUS             RESTARTS        AGE
+mysql-77cb7fbb66-fldcf    0/1     CrashLoopBackOff   8 (2m13s ago)   19m
+mysql2-544dd9d4d8-l4jr5   0/1     CrashLoopBackOff   6 (4m39s ago)   10m
+[mahsan@r9 ex280]$ oc create secret generic wp-secret --from-literal user=wpuser --from-literal password=redhat123 --from-literal database=wordpre               ss
+error: exactly one NAME is required, got 2
+See 'oc create secret generic -h' for help and examples
+[mahsan@r9 ex280]$ oc whoami
+john
+[mahsan@r9 ex280]$ oc create secret generic wp-secret --from-literal user=wpuser --from-literal password=redhat123 --from-literal database=wordpre               ss
+error: exactly one NAME is required, got 2
+See 'oc create secret generic -h' for help and examples
+[mahsan@r9 ex280]$ oc create secret generic wp-secret --from-literal user=wpuser --from-literal password=redhat123 --from-literal database=wordpress
+secret/wp-secret created
+[mahsan@r9 ex280]$ oc set env --from secret/wp-secret deployment/mysql --prefix MYSQL_
+deployment.apps/mysql updated
+[mahsan@r9 ex280]$ oc get pods
+NAME                      READY   STATUS             RESTARTS      AGE
+mysql-86f845b998-4zk5c    1/1     Running            0             5s
+mysql2-544dd9d4d8-l4jr5   0/1     CrashLoopBackOff   7 (94s ago)   12m
+[mahsan@r9 ex280]$ oc set env --from secret/wp-secret deployment/mysql2 --prefix MYSQL_
+deployment.apps/mysql2 updated
+[mahsan@r9 ex280]$ oc get pods
+NAME                      READY   STATUS        RESTARTS   AGE
+mysql-86f845b998-4zk5c    1/1     Running       0          42s
+mysql2-544dd9d4d8-l4jr5   0/1     Terminating   7          13m
+mysql2-6899c4fbdd-6vzxs   1/1     Running       0          2s
+[mahsan@r9 ex280]$
 
 
 </pre>
