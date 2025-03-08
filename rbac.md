@@ -228,6 +228,27 @@ mysql2-544dd9d4d8-l4jr5   0/1     Terminating   7          13m
 mysql2-6899c4fbdd-6vzxs   1/1     Running       0          2s
 [mahsan@r9 ex280]$
 
+[mahsan@r9 ex280]$ oc adm policy add-cluster-role-to-group --rolebinding-name self-provisioners self-provisioner system:authenticated:oauth
+Warning: Group 'system:authenticated:oauth' not found
+clusterrole.rbac.authorization.k8s.io/self-provisioner added: "system:authenticated:oauth"
+[mahsan@r9 ex280]$ oc adm policy add-cluster-role-to-group --rolebinding-name self-provisioners self-provisioner system:authenticated:oauth
+clusterrole.rbac.authorization.k8s.io/self-provisioner added: "system:authenticated:oauth"
+[mahsan@r9 ex280]$ oc describe clusterrolebindings self-provisioners
+Name:         self-provisioners
+Labels:       <none>
+Annotations:  rbac.authorization.kubernetes.io/autoupdate: false
+Role:
+  Kind:  ClusterRole
+  Name:  self-provisioner
+Subjects:
+  Kind   Name                        Namespace
+  ----   ----                        ---------
+  Group  system:authenticated:oauth
+[mahsan@r9 ex280]$ oc login -u natasha -p redhat
+Login successful.
+
+You have one project on this server: "auth-rbac"
+
 
 </pre>
 
