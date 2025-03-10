@@ -270,7 +270,214 @@ mysql-57-rhel7-f488c5f8d-dlt9f   0/1     CrashLoopBackOff   6 (76s ago)   8m16s
 mysql-856fbc96bd-j4cgn           1/1     Running            0             73s
 [mahsan@r9 ex280]$
 
+<h1>MYSQL 2 </h1>
 
+
+[mahsan@r9 ~]$ oc new-project auth-review
+Now using project "auth-review" on server "https://api.crc.testing:6443".
+
+You can add applications to this project with the 'new-app' command. For example, try:
+
+    oc new-app rails-postgresql-example
+
+to build a new example application in Ruby. Or use kubectl to deploy a simple Kubernetes application:
+
+    kubectl create deployment hello-node --image=registry.k8s.io/e2e-test-images/agnhost:2.43 -- /agnhost serve-hostname
+
+[mahsan@r9 ex280]$ oc create secret generic review-secret --from-literal=user=wpuser --from-literal=password=redha123 --from-literal=database=wordpress
+secret/review-secret created
+[mahsan@r9 ex280]$ oc get secrets
+NAME                       TYPE                      DATA   AGE
+builder-dockercfg-sc657    kubernetes.io/dockercfg   1      7m54s
+default-dockercfg-jkvtm    kubernetes.io/dockercfg   1      7m54s
+deployer-dockercfg-lrzbc   kubernetes.io/dockercfg   1      7m54s
+review-secret              Opaque                    3      5s
+[mahsan@r9 ex280]$
+
+[mahsan@r9 ex280]$ oc new-app mysql --docker-image registry.access.redhat.com/rhscl/mysql-57-rhel7:5.7-47
+Flag --docker-image has been deprecated, Deprecated flag use --image
+--> Found container image 77d20f2 (5 years old) from registry.access.redhat.com for "registry.access.redhat.com/rhscl/mysql-57-rhel7:5.7-47"
+
+    MySQL 5.7
+    ---------
+    MySQL is a multi-user, multi-threaded SQL database server. The container image provides a containerized packaging of the MySQL mysqld daemon and client application. The mysqld server daemon accepts connections from clients and provides access to content from MySQL databases on behalf of the clients.
+
+    Tags: database, mysql, mysql57, rh-mysql57
+
+    * An image stream tag will be created as "mysql-57-rhel7:5.7-47" that will track this image
+
+--> Found image 9314411 (3 months old) in image stream "openshift/mysql" under tag "8.0-el8" for "mysql"
+
+    MySQL 8.0
+    ---------
+    MySQL is a multi-user, multi-threaded SQL database server. The container image provides a containerized packaging of the MySQL mysqld daemon and client application. The mysqld server daemon accepts connections from clients and provides access to content from MySQL databases on behalf of the clients.
+
+    Tags: database, mysql, mysql80, mysql-80
+
+
+--> Creating resources ...
+    imagestream.image.openshift.io "mysql-57-rhel7" created
+    deployment.apps "mysql-57-rhel7" created
+    deployment.apps "mysql" created
+    service "mysql-57-rhel7" created
+    service "mysql" created
+--> Success
+    Application is not exposed. You can expose services to the outside world by executing one or more of the commands below:
+     'oc expose service/mysql-57-rhel7'
+     'oc expose service/mysql'
+    Run 'oc status' to view your app.
+[mahsan@r9 ex280]$ oc get all
+Warning: apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+NAME                                 READY   STATUS              RESTARTS   AGE
+pod/mysql-57-rhel7-f488c5f8d-dlt9f   0/1     ContainerCreating   0          6s
+pod/mysql-74c9cbfc5c-w98nh           0/1     ContainerCreating   0          6s
+
+NAME                     TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
+service/mysql            ClusterIP   10.217.4.91    <none>        3306/TCP   7s
+service/mysql-57-rhel7   ClusterIP   10.217.5.193   <none>        3306/TCP   7s
+
+NAME                             READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/mysql            0/1     1            0           7s
+deployment.apps/mysql-57-rhel7   0/1     1            0           7s
+
+NAME                                        DESIRED   CURRENT   READY   AGE
+replicaset.apps/mysql-57-rhel7-7cd7f6d785   1         0         0       7s
+replicaset.apps/mysql-57-rhel7-f488c5f8d    1         1         0       6s
+replicaset.apps/mysql-698ffc9d7             1         0         0       7s
+replicaset.apps/mysql-74c9cbfc5c            1         1         0       6s
+
+NAME                                            IMAGE REPOSITORY                                                                     TAGS     UPDATED
+imagestream.image.openshift.io/mysql-57-rhel7   default-route-openshift-image-registry.apps-crc.testing/auth-review/mysql-57-rhel7   5.7-47   6 seconds ago
+[mahsan@r9 ex280]$
+
+[mahsan@r9 ex280]$ oc logs pod/mysql-57-rhel7-f488c5f8d-dlt9fpod/mysql-57-rhel7-f488c5f8d-dlt9f
+error: arguments in resource/name form may not have more than one slash
+[mahsan@r9 ex280]$ oc logs pod/mysql-57-rhel7-f488c5f8d-dlt9f
+Warning: Can't detect memory limit from cgroups
+Warning: Can't detect number of CPU cores from cgroups
+Warning: Can't detect memory limit from cgroups
+Warning: Can't detect number of CPU cores from cgroups
+=> sourcing 20-validate-variables.sh ...
+You must either specify the following environment variables:
+  MYSQL_USER (regex: '^[a-zA-Z0-9_]+$')
+  MYSQL_PASSWORD (regex: '^[a-zA-Z0-9_~!@#$%^&*()-=<>,.?;:|]+$')
+  MYSQL_DATABASE (regex: '^[a-zA-Z0-9_]+$')
+Or the following environment variable:
+  MYSQL_ROOT_PASSWORD (regex: '^[a-zA-Z0-9_~!@#$%^&*()-=<>,.?;:|]+$')
+Or both.
+Optional Settings:
+  MYSQL_LOWER_CASE_TABLE_NAMES (default: 0)
+  MYSQL_LOG_QUERIES_ENABLED (default: 0)
+  MYSQL_MAX_CONNECTIONS (default: 151)
+  MYSQL_FT_MIN_WORD_LEN (default: 4)
+  MYSQL_FT_MAX_WORD_LEN (default: 20)
+  MYSQL_AIO (default: 1)
+  MYSQL_KEY_BUFFER_SIZE (default: 32M or 10% of available memory)
+  MYSQL_MAX_ALLOWED_PACKET (default: 200M)
+  MYSQL_TABLE_OPEN_CACHE (default: 400)
+  MYSQL_SORT_BUFFER_SIZE (default: 256K)
+  MYSQL_READ_BUFFER_SIZE (default: 8M or 5% of available memory)
+  MYSQL_INNODB_BUFFER_POOL_SIZE (default: 32M or 50% of available memory)
+  MYSQL_INNODB_LOG_FILE_SIZE (default: 8M or 15% of available memory)
+  MYSQL_INNODB_LOG_BUFFER_SIZE (default: 8M or 15% of available memory)
+
+For more information, see https://github.com/sclorg/mysql-container
+[mahsan@r9 ex280]$ oc set env deployment mysql --from=secret/review-secret --prefix=MYSQL_
+deployment.apps/mysql updated
+[mahsan@r9 ex280]$ oc get pods -w
+NAME                             READY   STATUS             RESTARTS        AGE
+mysql-57-rhel7-f488c5f8d-dlt9f   0/1     Error              6 (2m59s ago)   7m11s
+mysql-74c9cbfc5c-w98nh           0/1     CrashLoopBackOff   6 (28s ago)     7m11s
+mysql-856fbc96bd-j4cgn           0/1     Pending            0               8s
+mysql-57-rhel7-f488c5f8d-dlt9f   0/1     CrashLoopBackOff   6 (14s ago)     7m14s
+mysql-856fbc96bd-j4cgn           0/1     Pending            0               22s
+mysql-856fbc96bd-j4cgn           0/1     Pending            0               22s
+mysql-856fbc96bd-j4cgn           0/1     ContainerCreating   0               22s
+mysql-856fbc96bd-j4cgn           0/1     ContainerCreating   0               23s
+mysql-856fbc96bd-j4cgn           1/1     Running             0               24s
+mysql-74c9cbfc5c-w98nh           0/1     Terminating         6 (44s ago)     7m27s
+mysql-74c9cbfc5c-w98nh           0/1     Terminating         6               7m27s
+mysql-74c9cbfc5c-w98nh           0/1     Terminating         6               7m27s
+mysql-74c9cbfc5c-w98nh           0/1     Terminating         6               7m28s
+mysql-74c9cbfc5c-w98nh           0/1     Terminating         6               7m28s
+[mahsan@r9 ex280]$ oc get pods
+NAME                             READY   STATUS             RESTARTS      AGE
+mysql-57-rhel7-f488c5f8d-dlt9f   0/1     CrashLoopBackOff   6 (76s ago)   8m16s
+mysql-856fbc96bd-j4cgn           1/1     Running            0             73s
+[mahsan@r9 ex280]$
+
+<h1> Wordpress </h1>
+
+
+[mahsan@r9 ex280]$ oc new-app --name wordpress --docker-image quay.io/redhattraining/wordpress:5.3.0 -e WORDPRESS_DB_HOST=mysql -e WORDPRESS_DB_NAME=wordpress
+Flag --docker-image has been deprecated, Deprecated flag use --image
+--> Found container image ee025cb (5 years old) from quay.io for "quay.io/redhattraining/wordpress:5.3.0"
+
+    * An image stream tag will be created as "wordpress:5.3.0" that will track this image
+
+--> Creating resources ...
+    imagestream.image.openshift.io "wordpress" created
+    deployment.apps "wordpress" created
+    service "wordpress" created
+--> Success
+    Application is not exposed. You can expose services to the outside world by executing one or more of the commands below:
+     'oc expose service/wordpress'
+    Run 'oc status' to view your app.
+[mahsan@r9 ex280]$ oc get all
+Warning: apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+NAME                                 READY   STATUS             RESTARTS        AGE
+pod/mysql-57-rhel7-f488c5f8d-dlt9f   0/1     CrashLoopBackOff   9 (4m18s ago)   26m
+pod/mysql-856fbc96bd-j4cgn           1/1     Running            0               19m
+pod/wordpress-668b695874-5ws6x       1/1     Running            0               6s
+
+NAME                     TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
+service/mysql            ClusterIP   10.217.4.91    <none>        3306/TCP   26m
+service/mysql-57-rhel7   ClusterIP   10.217.5.193   <none>        3306/TCP   26m
+service/wordpress        ClusterIP   10.217.5.112   <none>        80/TCP     7s
+
+NAME                             READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/mysql            1/1     1            1           26m
+deployment.apps/mysql-57-rhel7   0/1     1            0           26m
+deployment.apps/wordpress        1/1     1            1           7s
+
+NAME                                        DESIRED   CURRENT   READY   AGE
+replicaset.apps/mysql-57-rhel7-7cd7f6d785   0         0         0       26m
+replicaset.apps/mysql-57-rhel7-f488c5f8d    1         1         0       26m
+replicaset.apps/mysql-698ffc9d7             0         0         0       26m
+replicaset.apps/mysql-74c9cbfc5c            0         0         0       26m
+replicaset.apps/mysql-856fbc96bd            1         1         1       19m
+replicaset.apps/wordpress-668b695874        1         1         1       6s
+replicaset.apps/wordpress-84f8d9f8          0         0         0       7s
+
+NAME                                            IMAGE REPOSITORY                                                                     TAGS     UPDATED
+imagestream.image.openshift.io/mysql-57-rhel7   default-route-openshift-image-registry.apps-crc.testing/auth-review/mysql-57-rhel7   5.7-47   26 minutes ago
+imagestream.image.openshift.io/wordpress        default-route-openshift-image-registry.apps-crc.testing/auth-review/wordpress        5.3.0    6 seconds ago
+[mahsan@r9 ex280]$
+
+[mahsan@r9 ex280]$ oc set env --from=secret/review-secret --prefix=WORDPRESS_DB deployment wordpress
+deployment.apps/wordpress updated
+[mahsan@r9 ex280]$
+
+[mahsan@r9 ex280]$ oc create sa wordpress-sa
+serviceaccount/wordpress-sa created
+[mahsan@r9 ex280]$ oc adm policy add-scc-to-user anyuid -z wordpress-sa
+clusterrole.rbac.authorization.k8s.io/system:openshift:scc:anyuid added: "wordpress-sa"
+[mahsan@r9 ex280]$ oc set serviceaccount deployment wordpress wordpress-sa
+deployment.apps/wordpress serviceaccount updated
+[mahsan@r9 ex280]$ oc get pods
+NAME                             READY   STATUS             RESTARTS       AGE
+mysql-57-rhel7-f488c5f8d-dlt9f   0/1     CrashLoopBackOff   10 (85s ago)   28m
+mysql-856fbc96bd-j4cgn           1/1     Running            0              21m
+wordpress-6b8df7f58c-hft68       1/1     Running            0              3s
+wordpress-74bd86f667-wnksp       1/1     Terminating        1 (19s ago)    49s
+[mahsan@r9 ex280]$
+
+[mahsan@r9 ex280]$ oc get pods
+NAME                             READY   STATUS             RESTARTS        AGE
+mysql-57-rhel7-f488c5f8d-dlt9f   0/1     CrashLoopBackOff   10 (116s ago)   29m
+mysql-856fbc96bd-j4cgn           1/1     Running            0               22m
+wordpress-6b8df7f58c-hft68       1/1     Running            0               34s
+[mahsan@r9 ex280]$
 
 
 </pre>
